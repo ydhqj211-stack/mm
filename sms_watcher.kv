@@ -1,0 +1,183 @@
+#:kivy 2.1.0
+
+BoxLayout:
+    orientation: 'vertical'
+    padding: 10
+    spacing: 10
+
+    canvas.before:
+        Color:
+            rgba: (0.1, 0.1, 0.15, 1)
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    BoxLayout:
+        size_hint_y: 0.15
+        orientation: 'horizontal'
+
+        Label:
+            text: 'SMS Watcher'
+            font_size: '24sp'
+            bold: True
+            color: (0.3, 0.8, 1, 1)
+
+        Label:
+            id: status_label
+            text: '状态: 未启动'
+            font_size: '14sp'
+            color: (1, 0, 0, 1)
+
+    BoxLayout:
+        size_hint_y: 0.15
+        orientation: 'horizontal'
+        padding: 10
+        canvas.before:
+            Color:
+                rgba: (0.2, 0.2, 0.25, 1)
+            RoundedRectangle:
+                pos: self.pos
+                size: self.size
+                radius: [10, 10, 10, 10]
+
+        Label:
+            text: '监控开关'
+            size_hint_x: 0.3
+
+        Switch:
+            id: monitor_switch
+            size_hint_x: 0.2
+            on_active: app.on_monitor_switch(*args)
+
+        Button:
+            text: '测试Telegram'
+            size_hint_x: 0.25
+            on_press: app.test_telegram()
+
+        Button:
+            text: '加载历史'
+            size_hint_x: 0.25
+            on_press: app.load_history()
+
+    BoxLayout:
+        size_hint_y: 0.35
+        orientation: 'vertical'
+        padding: 10
+        canvas.before:
+            Color:
+                rgba: (0.2, 0.2, 0.25, 1)
+            RoundedRectangle:
+                pos: self.pos
+                size: self.size
+                radius: [10, 10, 10, 10]
+
+        Label:
+            text: 'Telegram 配置'
+            size_hint_y: 0.15
+            font_size: '16sp'
+            bold: True
+            color: (0.3, 0.8, 1, 1)
+
+        BoxLayout:
+            size_hint_y: 0.25
+            orientation: 'horizontal'
+
+            Label:
+                text: 'Bot Token:'
+                size_hint_x: 0.25
+
+            TextInput:
+                id: bot_token
+                hint_text: '输入你的Telegram Bot Token'
+                multiline: False
+                size_hint_x: 0.75
+
+        BoxLayout:
+            size_hint_y: 0.25
+            orientation: 'horizontal'
+
+            Label:
+                text: 'Chat ID:'
+                size_hint_x: 0.25
+
+            TextInput:
+                id: chat_id
+                hint_text: '输入你的Telegram Chat ID'
+                multiline: False
+                size_hint_x: 0.75
+
+        Label:
+            text: '配置信息会保存在本地'
+            size_hint_y: 0.2
+            font_size: '12sp'
+            color: (0.6, 0.6, 0.6, 1)
+
+    BoxLayout:
+        size_hint_y: 0.35
+        orientation: 'vertical'
+        padding: 10
+        canvas.before:
+            Color:
+                rgba: (0.2, 0.2, 0.25, 1)
+            RoundedRectangle:
+                pos: self.pos
+                size: self.size
+                radius: [10, 10, 10, 10]
+
+        Label:
+            text: '最近短信'
+            size_hint_y: 0.15
+            font_size: '16sp'
+            bold: True
+            color: (0.3, 0.8, 1, 1)
+
+        RecycleView:
+            id: sms_list
+            size_hint_y: 0.85
+            viewclass: 'SMSItem'
+            RecycleBoxLayout:
+                orientation: 'vertical'
+                spacing: 5
+                padding: 5
+                size_hint_y: None
+                height: self.minimum_height
+
+<SMSItem>:
+    size_hint_y: None
+    height: 80
+    orientation: 'vertical'
+    padding: 8
+    canvas.before:
+        Color:
+            rgba: (0.15, 0.15, 0.2, 1)
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [8, 8, 8, 8]
+
+    BoxLayout:
+        orientation: 'horizontal'
+        size_hint_y: 0.5
+
+        Label:
+            text: '📤 ' + root.sender
+            font_size: '14sp'
+            bold: True
+            color: (0.3, 0.8, 1, 1)
+            size_hint_x: 0.4
+
+        Label:
+            text: root.time
+            font_size: '12sp'
+            color: (0.6, 0.6, 0.6, 1)
+            size_hint_x: 0.6
+            halign: 'right'
+
+    Label:
+        text: root.message
+        font_size: '13sp'
+        text_size: self.size
+        shorten: True
+        shorten_from: 'right'
+        color: (1, 1, 1, 1)
+        size_hint_y: 0.5
